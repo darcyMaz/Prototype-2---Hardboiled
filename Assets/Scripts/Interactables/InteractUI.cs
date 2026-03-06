@@ -30,11 +30,22 @@ public class InteractUI : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        if (!transform.GetChild(0).TryGetComponent(out ui)) Debug.Log("A door could not find its corresponding UI gameobject so it will not appear.");
-        else UseUI = true;
+    private void Start()
+    {        
 
+        // Cycle through the child GameObjects to find the one that has the InteractPrompt tag.
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).tag == "InteractPrompt")
+            {
+                // Make sure the right component exists at that GameObject.
+                if (!transform.GetChild(i).TryGetComponent(out ui)) Debug.Log("A door could not find its corresponding UI gameobject so it will not appear.");
+                else UseUI = true;
+
+                // End the loop after you've found it.
+                break;
+            }
+        }
         if (UseUI) ui.enabled = false;
     }
    
