@@ -7,10 +7,9 @@ public class Dialogue : MonoBehaviour
     private InteractOverlap interactOverlap;
     [SerializeField] private TextMeshProUGUI textUI;
     [SerializeField] private Image imageUI;
-    [SerializeField] private TextAsset text;
     private bool IsOverlapping = false;
 
-
+    [SerializeField] private TextAsset text;
     private bool UsesDialogue = false;
     private bool DialogueStarted = false;
     private bool MainDialogueDone = false;
@@ -34,13 +33,6 @@ public class Dialogue : MonoBehaviour
         {
             string lines_raw = text.text;
             lines = lines_raw.Split('\n');
-
-            Debug.Log(lines[15] + " " + lines[15].Length);
-            for (int i = 0; i < lines[15].Length; i++)
-            {
-                bool temp = (lines[15][i] == '\n') ? true: false;
-                Debug.Log(lines[15][i] + " " + temp);
-            }
         }
         else
         {
@@ -106,15 +98,15 @@ public class Dialogue : MonoBehaviour
 
             OpenDialogueBox();
             
-            /*
+            // This if statement should not happen.
             if (MainDialogueDone)
             {
                 if (lineIndex == lines.Length)
                 {
-                    lineIndex = EODIndex + 1;
+                    lineIndex = 0;
+                    Debug.Log("The dialogue did not have or did not properly read a line that said 'EOD'. It is possible the text file has the wrong end of line format.");
                 }
             }
-            */
 
             SendDialogue(lines[lineIndex]);
             lineIndex++;
