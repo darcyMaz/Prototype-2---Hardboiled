@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public class Dialogue : MonoBehaviour
     private string[] lines;
     private int lineIndex = 0;
     private int EODIndex = 0;
+
+    public event System.Action DialogueDone;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -94,20 +97,18 @@ public class Dialogue : MonoBehaviour
 
         if (IsOverlapping && UsesDialogue && !DialogueStarted)
         {
-            DialogueStarted = true;
-
-            OpenDialogueBox();
             
-            // This if statement should not happen.
+            // If the EOD (End Of Dialogue) line is the final line, this if statement will run and won't let any dialogue appear.
             if (MainDialogueDone)
             {
                 if (lineIndex == lines.Length)
                 {
-                    lineIndex = 0;
-                    Debug.Log("The dialogue did not have or did not properly read a line that said 'EOD'. It is possible the text file has the wrong end of line format.");
+                    return ;
                 }
             }
 
+            DialogueStarted = true;
+            OpenDialogueBox();
             SendDialogue(lines[lineIndex]);
             lineIndex++;
         }
@@ -124,6 +125,17 @@ public class Dialogue : MonoBehaviour
                 EODIndex = lineIndex;
                 MainDialogueDone = true;
                 lineIndex++;
+
+                // Dialogue components will not always have subscribers.
+                // Invoking an event without subscribers causes an error. So we do this.
+                try
+                {
+                    DialogueDone.Invoke();
+                }
+                catch (NullReferenceException e)
+                {
+                    // Debug.Log(e.Message);
+                }
             }
             else if (MainDialogueDone)
             {
@@ -156,4 +168,8 @@ public class Dialogue : MonoBehaviour
         DialogueStarted = false;
     }
     
+    private void TempFunc()
+    {
+
+    }
 }

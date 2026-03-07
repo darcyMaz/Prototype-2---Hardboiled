@@ -4,7 +4,7 @@ using UnityEngine;
 public class InteractTransition : MonoBehaviour
 {
     [SerializeField] private string NextScene;
-    [SerializeField] private bool IsDoorLocked = false;
+    [SerializeField] private bool isDoorLocked = false;
     private bool IsPlayerOverlapping = false;
     private InteractOverlap InteractOverlap;
 
@@ -46,10 +46,19 @@ public class InteractTransition : MonoBehaviour
 
     private void DoorInteract()
     {
-        if (IsPlayerOverlapping && !IsDoorLocked)
+        if (IsPlayerOverlapping && !isDoorLocked)
         {
             // Send the scene string over to the scene manager.
             SceneManager.Instance.BufferSceneChange(NextScene);
         }
+    }
+
+    public void DoorLock(bool lockBool)
+    {
+        isDoorLocked = lockBool;
+    }
+    public bool IsDoorLocked()
+    {
+        return isDoorLocked;
     }
 }
