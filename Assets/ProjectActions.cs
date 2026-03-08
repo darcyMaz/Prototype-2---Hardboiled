@@ -327,6 +327,89 @@ public partial class @ProjectActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Pager"",
+            ""id"": ""b9b9b3a1-fbe6-4cc8-9bbe-9ab5ad60ce61"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Button"",
+                    ""id"": ""1df5ea51-9537-46b6-8eef-e28d872da5dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""35969168-b4dc-4467-99ed-1fb8fee751c3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""42cf529b-1f48-4d9a-9427-ceaf041cee60"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""6f1cacb6-abd4-4506-8e3e-f4aace497e42"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""bdde3c85-3a9d-43e8-bfbe-8cff5bc30a2c"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d2a94340-9dde-4f7f-9e8e-dee5f3924ab8"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""aa370228-45d7-4e75-b9ca-cedf67ef337f"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -338,11 +421,15 @@ public partial class @ProjectActions: IInputActionCollection2, IDisposable
         m_Player_Jab = m_Player.FindAction("Jab", throwIfNotFound: true);
         m_Player_Cross = m_Player.FindAction("Cross", throwIfNotFound: true);
         m_Player_Hook = m_Player.FindAction("Hook", throwIfNotFound: true);
+        // Pager
+        m_Pager = asset.FindActionMap("Pager", throwIfNotFound: true);
+        m_Pager_Move = m_Pager.FindAction("Move", throwIfNotFound: true);
     }
 
     ~@ProjectActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, ProjectActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Pager.enabled, "This will cause a leak and performance issues, ProjectActions.Pager.Disable() has not been called.");
     }
 
     /// <summary>
@@ -554,6 +641,102 @@ public partial class @ProjectActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Pager
+    private readonly InputActionMap m_Pager;
+    private List<IPagerActions> m_PagerActionsCallbackInterfaces = new List<IPagerActions>();
+    private readonly InputAction m_Pager_Move;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Pager".
+    /// </summary>
+    public struct PagerActions
+    {
+        private @ProjectActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public PagerActions(@ProjectActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Pager/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_Pager_Move;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Pager; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="PagerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(PagerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="PagerActions" />
+        public void AddCallbacks(IPagerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PagerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PagerActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="PagerActions" />
+        private void UnregisterCallbacks(IPagerActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PagerActions.UnregisterCallbacks(IPagerActions)" />.
+        /// </summary>
+        /// <seealso cref="PagerActions.UnregisterCallbacks(IPagerActions)" />
+        public void RemoveCallbacks(IPagerActions instance)
+        {
+            if (m_Wrapper.m_PagerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="PagerActions.AddCallbacks(IPagerActions)" />
+        /// <seealso cref="PagerActions.RemoveCallbacks(IPagerActions)" />
+        /// <seealso cref="PagerActions.UnregisterCallbacks(IPagerActions)" />
+        public void SetCallbacks(IPagerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PagerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PagerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="PagerActions" /> instance referencing this action map.
+    /// </summary>
+    public PagerActions @Pager => new PagerActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -596,5 +779,20 @@ public partial class @ProjectActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHook(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Pager" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="PagerActions.AddCallbacks(IPagerActions)" />
+    /// <seealso cref="PagerActions.RemoveCallbacks(IPagerActions)" />
+    public interface IPagerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
     }
 }
