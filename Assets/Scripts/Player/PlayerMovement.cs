@@ -29,10 +29,17 @@ public class PlayerMovement : MonoBehaviour
     {
         move = projectActions.Player.Move;
         move.Enable();
+
+        DepTransition.OnDepEntry += DisableMove;
+        DepTransition.OnDepExit += EnableMove;
+
     }
     private void OnDisable()
     {
         move.Disable();
+
+        DepTransition.OnDepEntry -= DisableMove;
+        DepTransition.OnDepExit -= EnableMove;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -82,7 +89,15 @@ public class PlayerMovement : MonoBehaviour
         // It would be cool if I could make it flip around like paper mario.
         // Rotate the sprite about the x axis but smoothdamp the rotation
 
-
         if (IsSROn) sr.flipX = (direction == 0) ? sr.flipX : (direction == -1) ? true : false;
+    }
+
+    private void EnableMove()
+    {
+        IsRBOn = true;
+    }
+    private void DisableMove()
+    {
+        IsRBOn = false;
     }
 }

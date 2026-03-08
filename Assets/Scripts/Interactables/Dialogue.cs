@@ -134,7 +134,7 @@ public class Dialogue : MonoBehaviour
                 }
                 catch (NullReferenceException e)
                 {
-                    // Debug.Log(e.Message);
+                    Debug.Log("A dialogue component's DialogueDone event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
                 }
             }
             else if (MainDialogueDone)

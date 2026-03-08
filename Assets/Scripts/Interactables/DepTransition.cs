@@ -7,10 +7,19 @@ public class DepTransition : MonoBehaviour
     private bool IsPlayerOverlapping = false;
     private InteractOverlap InteractOverlap;
 
+    public static event System.Action OnDepEntry;
+    public static event System.Action OnDepExit;
+
+    private bool DepTimerStarted = false;
+    private float DepTimer = 0f;
+    [SerializeField] private float DepTime;
+
     private void OnEnable()
     {
         // Subscribe to the player's interact event.
         PlayerInteract.OnInteractPressed += DepInteract;
+        OnDepEntry += EnterDep;
+        OnDepExit += ExitDep;
 
         // Subscribe to InteractOverlap's overap event.
         if (!TryGetComponent(out InteractOverlap))
@@ -26,12 +35,23 @@ public class DepTransition : MonoBehaviour
     private void OnDisable()
     {
         PlayerInteract.OnInteractPressed -= DepInteract;
+        OnDepEntry -= EnterDep;
+        OnDepExit -= ExitDep;
 
         if (InteractOverlap != null)
         {
             InteractOverlap.OnOverlap -= ReadyTransition;
             InteractOverlap.OnOverlapEnd -= UnreadyTransition;
         }
+    }
+
+    private void Update()
+    {
+        if (DepTimerStarted && DepTimer <= 0)
+        {
+            OnDepExit.Invoke();
+        }
+        DepTimer = (DepTimer < 0) ? 0 : DepTimer - Time.deltaTime;
     }
 
     private void ReadyTransition()
@@ -49,7 +69,18 @@ public class DepTransition : MonoBehaviour
         {
             // Send the scene string over to the scene manager.
             // SceneManager.Instance.BufferSceneChange(NextScene);
-            Debug.Log("Entered Dep");
+            OnDepEntry.Invoke();
         }
+    }
+
+    private void EnterDep()
+    {
+        DepTimerStarted = true;
+        DepTimer = DepTime;
+    }
+
+    private void ExitDep()
+    {
+        IsDoorLocked = true;
     }
 }
