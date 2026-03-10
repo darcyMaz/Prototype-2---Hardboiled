@@ -21,14 +21,14 @@ public class FriendAnimation : MonoBehaviour
         DepTransition.OnDepEntry += StartFriendAnim;
         DepTransition.OnDepExit += EndFriendAnimation;
 
-        friendDialogue.DialogueDone += StartExitAnimation;
+        friendDialogue.OnDialogueDone += StartExitAnimation;
     }
     private void OnDisable()
     {
         DepTransition.OnDepEntry -= StartFriendAnim;
         DepTransition.OnDepExit -= EndFriendAnimation;
 
-        friendDialogue.DialogueDone -= StartExitAnimation;
+        friendDialogue.OnDialogueDone -= StartExitAnimation;
     }
 
     private void StartFriendAnim()

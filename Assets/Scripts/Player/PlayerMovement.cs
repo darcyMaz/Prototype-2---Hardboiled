@@ -5,8 +5,10 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private PlayerLockMovement plm;
     private bool IsRBOn = false;
     private bool IsSROn = false;
+    private bool IsMoveLockOn = false;
 
     private float direction = 1;
 
@@ -33,6 +35,12 @@ public class PlayerMovement : MonoBehaviour
         DepTransition.OnDepEntry += DisableMove;
         DepTransition.OnDepExit += EnableMove;
 
+        if (IsMoveLockOn)
+        {
+            plm.OnLockMovement += DisableMove;
+            plm.OnUnlockMovement += EnableMove;
+        }
+        
     }
     private void OnDisable()
     {
@@ -40,6 +48,12 @@ public class PlayerMovement : MonoBehaviour
 
         DepTransition.OnDepEntry -= DisableMove;
         DepTransition.OnDepExit -= EnableMove;
+
+        if (IsMoveLockOn)
+        {
+            plm.OnLockMovement -= DisableMove;
+            plm.OnUnlockMovement -= EnableMove;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -50,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (!TryGetComponent(out sr)) { Debug.Log("SpriteRenderer could not be found on the player. Disabling the SpriteRenderer for this object."); }
         else IsSROn = true;
+
+        if (!TryGetComponent(out plm)) { Debug.Log("PlayerLockMovement could not be found on the player. Disabling the Player movement lock for this object."); }
+        else IsMoveLockOn = true;
     }
 
     // Update is called once per frame

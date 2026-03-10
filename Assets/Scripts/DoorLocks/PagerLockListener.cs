@@ -8,13 +8,13 @@ public class PagerLockListener : MonoBehaviour
     {
         if (bartender != null)
         {
-            bartender.DialogueDone += SwitchToPagerScene;
+            bartender.OnDialogueDone += SwitchToPagerScene;
         }
         else Debug.Log("The Dialogue component from the bartender could not be found. Connect it from the inspector if you have not laready.");
     }
     private void OnDisable()
     {
-        if (bartender != null) bartender.DialogueDone -= SwitchToPagerScene;
+        if (bartender != null) bartender.OnDialogueDone -= SwitchToPagerScene;
     }
 
     private void SwitchToPagerScene()

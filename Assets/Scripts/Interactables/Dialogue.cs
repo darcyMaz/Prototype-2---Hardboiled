@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,14 @@ public class Dialogue : MonoBehaviour
     private int lineIndex = 0;
     private int EODIndex = 0;
 
-    public event System.Action DialogueDone;
+    // This event plays when the main dialogue is done.
+    public event System.Action OnDialogueDone;
+    // This event plays when a dialogue box opens.
+    public event System.Action OnDialogueStarted;
+    // This event plays when a dialogue box closes.
+    public event System.Action OnDialogueClosed;
+
+    private static List<Dialogue> dialogues = new List<Dialogue>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +38,8 @@ public class Dialogue : MonoBehaviour
 
     private void Awake()
     {
+        dialogues.Add(this);
+
         if (!TryGetComponent(out interactOverlap)) Debug.Log("A Dialogue component tried to find the InteractOverlap. This object may not have it as a component");
 
         if (text != null)
@@ -44,7 +54,6 @@ public class Dialogue : MonoBehaviour
             lines[1] = "EOD";
             lines[2] = "The text for this dialogue could not be found.";
         }
-        
     }
 
     private void OnEnable()
@@ -56,6 +65,7 @@ public class Dialogue : MonoBehaviour
         }
 
         PlayerInteract.OnInteractPressed += DialoguePressed;
+
     }
     private void OnDisable()
     {
@@ -64,6 +74,10 @@ public class Dialogue : MonoBehaviour
             interactOverlap.OnOverlap -= ReadyDialogue;
             interactOverlap.OnOverlapEnd -= UnreadyDialogue;
         }
+
+        PlayerInteract.OnInteractPressed -= DialoguePressed;
+
+        dialogues.Remove(this);
     }
 
     private void ReadyDialogue()
@@ -107,6 +121,15 @@ public class Dialogue : MonoBehaviour
                 }
             }
 
+            // May want to put code directly below this into its own function. 
+            try
+            {
+                OnDialogueStarted.Invoke();
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.Log("A dialogue component's OnDialogueStarted event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
+            }
             DialogueStarted = true;
             OpenDialogueBox();
             SendDialogue(lines[lineIndex]);
@@ -118,6 +141,15 @@ public class Dialogue : MonoBehaviour
             {
                 lineIndex = EODIndex + 1;
                 CloseDialogueBox();
+
+                try
+                {
+                    OnDialogueClosed.Invoke();
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
+                }
             }
             else if (lines[lineIndex] == "EOD")
             {
@@ -130,16 +162,33 @@ public class Dialogue : MonoBehaviour
                 // Invoking an event without subscribers causes an error. So we do this.
                 try
                 {
-                    DialogueDone.Invoke();
+                    OnDialogueDone.Invoke();
                 }
                 catch (NullReferenceException e)
                 {
                     Debug.Log("A dialogue component's DialogueDone event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
                 }
+                try
+                {
+                    OnDialogueClosed.Invoke();
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
+                }
+
             }
             else if (MainDialogueDone)
             {
                 CloseDialogueBox();
+                try
+                {
+                    OnDialogueClosed.Invoke();
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
+                }
             }
             else 
             {
@@ -167,9 +216,12 @@ public class Dialogue : MonoBehaviour
         SendDialogue("");
         DialogueStarted = false;
     }
-    
-    private void TempFunc()
-    {
 
+    public static IEnumerable<Dialogue> GetEnabledDialogues()
+    {
+        foreach (var item in dialogues)
+        {
+            yield return item;
+        }
     }
 }

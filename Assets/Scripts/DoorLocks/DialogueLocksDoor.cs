@@ -16,14 +16,14 @@ public class DialogueLocksDoor : MonoBehaviour
     {
         if (DoesUnlock)
         {
-            dialogue.DialogueDone += FlipLock;
+            dialogue.OnDialogueDone += FlipLock;
         }
     }
     private void OnDisable()
     {
         if (DoesUnlock)
         {
-            dialogue.DialogueDone -= FlipLock;
+            dialogue.OnDialogueDone -= FlipLock;
         }
     }
 

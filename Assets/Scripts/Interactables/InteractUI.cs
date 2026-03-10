@@ -1,12 +1,15 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractUI : MonoBehaviour
 {
-    private SpriteRenderer ui;
+    // private SpriteRenderer ui;
     private bool UseUI = false;
     private InteractOverlap InteractOverlap;
 
-    // Make a script: Door Lock and it does TryGetComponent on DoorUI and then unlocks the door
+    [SerializeField] private Image uiBG;
+    [SerializeField] private TextMeshProUGUI uiText;
 
     private void OnEnable()
     {
@@ -32,7 +35,7 @@ public class InteractUI : MonoBehaviour
 
     private void Start()
     {        
-
+        /*
         // Cycle through the child GameObjects to find the one that has the InteractPrompt tag.
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -47,15 +50,27 @@ public class InteractUI : MonoBehaviour
             }
         }
         if (UseUI) ui.enabled = false;
+        */
+
+        if (uiBG == null || uiText == null) Debug.Log("Could not find one or both UI elements for the InteractUI component.");
+        else UseUI = true;
     }
    
     private void EnableUI()
     {
-        if (UseUI) ui.enabled = true;
+        if (UseUI)
+        {
+            uiText.text = "Press W to Interact";
+            uiBG.color = Color.black;
+        }
     }
     private void DisableUI()
     {
-        if (UseUI) ui.enabled = false;
+        if (UseUI)
+        {
+            uiText.text = "";
+            uiBG.color = new Color(0,0,0,0);
+        }
     }
 
 }
