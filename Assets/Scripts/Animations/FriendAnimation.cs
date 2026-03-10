@@ -7,6 +7,8 @@ public class FriendAnimation : MonoBehaviour
     private InteractUI interactUI;
     private Dialogue friendDialogue;
 
+    // Test
+
     private void Awake()
     {
         if (!TryGetComponent(out friend_anim)) Debug.Log("The FriendAnimation component could not find its Animator component.");
