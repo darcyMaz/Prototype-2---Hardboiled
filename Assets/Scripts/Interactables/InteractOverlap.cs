@@ -6,6 +6,8 @@ public class InteractOverlap : MonoBehaviour
     public event Action OnOverlap;
     public event Action OnOverlapEnd;
 
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player") OnOverlap.Invoke();
@@ -15,4 +17,6 @@ public class InteractOverlap : MonoBehaviour
     {
         if (collision.tag == "Player") OnOverlapEnd.Invoke();
     }
+
+
 }

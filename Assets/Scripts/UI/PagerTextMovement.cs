@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class PagerTextMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    [SerializeField] float MaxX, MaxY, MinX, MinY;
+    // These values should be based on the dynamic size of the text so the sentence in the puzzle can change size if needed.
+    [SerializeField] float MaxX, MinX;
     private bool CanMove = false;
 
     private ProjectActions inputActions;
@@ -28,28 +29,30 @@ public class PagerTextMovement : MonoBehaviour
         move.Disable();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         if (!TryGetComponent(out rb)) Debug.Log("The PagerButton script cannot find the Rigidbody2D.");
         else CanMove = true;
     }
 
     private void Update()
     {
+        Debug.Log(transform.position.x);
+
         float currentMove = move.ReadValue<float>();
 
         if (CanMove)
         {
             float newSpeed = 0f;
 
-            if (currentMove == 1)
-            {
-                newSpeed = Mathf.MoveTowards(rb.linearVelocityX, MaxSpeed, SmoothTime * Time.deltaTime);
-            }
-            else if (currentMove == -1)
+            if (currentMove == 1 && transform.position.x > MinX) // 520
             {
                 newSpeed = Mathf.MoveTowards(rb.linearVelocityX, -MaxSpeed, SmoothTime * Time.deltaTime);
+            }
+            else if (currentMove == -1 && transform.position.x < MaxX) // 935
+            {
+                newSpeed = Mathf.MoveTowards(rb.linearVelocityX, MaxSpeed, SmoothTime * Time.deltaTime);
             }
 
             rb.linearVelocityX = newSpeed;

@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class PlayerDep : MonoBehaviour
 {
-    // Player's components to manipulate
     private SpriteRenderer sr;
-
     private void Start()
     {
         if (!TryGetComponent(out sr)) Debug.Log("The PlayerDep component could not find the player's sprite renderer.");

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PagerLockListener : MonoBehaviour
 {
-    [SerializeField] Dialogue bartender;
+    [SerializeField] private Dialogue bartender;
     private void OnEnable()
     {
         if (bartender != null)

@@ -8,6 +8,8 @@ public class PlayerInteract : MonoBehaviour
     private ProjectActions projectActions;
     private InputAction interact;
 
+    
+
     private void Awake()
     {
         projectActions = new ProjectActions();
@@ -17,6 +19,7 @@ public class PlayerInteract : MonoBehaviour
         interact = projectActions.Player.Interact;
         interact.Enable();
         interact.performed += InteractPressed;
+
     }
     private void OnDisable()
     {
@@ -27,4 +30,6 @@ public class PlayerInteract : MonoBehaviour
     {
         OnInteractPressed.Invoke();
     }
+
+
 }
