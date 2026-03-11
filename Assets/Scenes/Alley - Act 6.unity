@@ -342,7 +342,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 493514635}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -431,7 +431,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -621,8 +621,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   target: {fileID: 1128195884}
-  MaxSpeed: 2
+  MaxSpeed: 1.4
   PunchDistance: 3
+  PunchDistanceBuffer: 0.6
+  PunchTime: 0.8
+  RetractPunchTime: 0.35
+  punchSprite: {fileID: -4067814388406995886, guid: 3cafe524246caa545ac668507108c41f, type: 3}
+  punchSprite2: {fileID: 0}
+  readySprite: {fileID: -2701818915754415745, guid: 190442fb6c164f340a91b11d61745412, type: 3}
+  punchCollider: {fileID: 493514637}
 --- !u!1 &691184995
 GameObject:
   m_ObjectHideFlags: 0
