@@ -24,11 +24,33 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Sprite punchSprite;
     [SerializeField] private Sprite punchSprite2;
     [SerializeField] private Sprite readySprite;
-    [SerializeField] private BoxCollider2D punchCollider;
+    [SerializeField] private BoxCollider2D punchColliderRight;
+    [SerializeField] private BoxCollider2D punchColliderLeft;
+
     private SpriteRenderer sr;
     private bool UsesSR = false;
 
+    private bool IsFighting = false;
 
+    private void OnEnable()
+    {
+        FightManager.instance.OnFightStarted += StartFight;
+        FightManager.instance.OnFightCompleted += EndFight;
+    }
+    private void OnDisable()
+    {
+        FightManager.instance.OnFightStarted -= StartFight;
+        FightManager.instance.OnFightCompleted -= EndFight;
+    }
+
+    private void StartFight()
+    {
+        IsFighting = true;
+    }
+    private void EndFight()
+    {
+        IsFighting = false;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,45 +65,51 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PunchReady && PunchTimer <= 0)
+        if (IsFighting)
         {
-            Debug.Log("Punch!");
-            PunchReady = false;
-            Punch();
-        }
-        PunchTimer = (PunchTimer < 0) ? 0 : PunchTimer - Time.deltaTime;
+            if (PunchReady && PunchTimer <= 0)
+            {
+                Debug.Log("Punch!");
+                PunchReady = false;
+                Punch();
+            }
+            PunchTimer = (PunchTimer < 0) ? 0 : PunchTimer - Time.deltaTime;
 
-        distance = Mathf.Abs(target.position.x - transform.position.x);
+            distance = Mathf.Abs(target.position.x - transform.position.x);
 
-        if (distance < PunchDistance && !PunchReady)
-        {
-            Debug.Log("Close enough to punch. Punch ready.");
-            PunchReady = true;
-            PunchTimer = PunchTime;
-        }
-        else if (PunchReady && distance > PunchDistance + PunchDistanceBuffer)
-        {
-            Debug.Log("Player outside of punch range. Punch unready.");
-            PunchReady = false;
-            PunchTimer = 0;
-        }
+            if (distance < PunchDistance && !PunchReady)
+            {
+                Debug.Log("Close enough to punch. Punch ready.");
+                PunchReady = true;
+                PunchTimer = PunchTime;
+            }
+            else if (PunchReady && distance > PunchDistance + PunchDistanceBuffer)
+            {
+                Debug.Log("Player outside of punch range. Punch unready.");
+                PunchReady = false;
+                PunchTimer = 0;
+            }
 
-        if (target.position.x < transform.position.x)
-        {
-            direction = -1;
-            sr.flipX = false;
-        }
-        else
-        {
-            direction = 1;
-            sr.flipX = true;
+            if (target.position.x < transform.position.x)
+            {
+                direction = -1;
+                sr.flipX = false;
+            }
+            else
+            {
+                direction = 1;
+                sr.flipX = true;
+            }
         }
     }
     private void FixedUpdate()
     {
-        if (DoesMove && distance > PunchDistance)
+        if (IsFighting)
         {
-            rb.linearVelocity = new Vector2(direction * MaxSpeed, rb.linearVelocity.y);
+            if (DoesMove && distance > PunchDistance)
+            {
+                rb.linearVelocity = new Vector2(direction * MaxSpeed, rb.linearVelocity.y);
+            }
         }
     }
 
@@ -97,9 +125,9 @@ public class EnemyMovement : MonoBehaviour
             else sr.sprite = punchSprite2;
         }
         
-
         // activate trigger zone
-        if (punchCollider != null) punchCollider.enabled = true;
+        if (punchColliderRight != null && direction == 1) punchColliderRight.enabled = true;
+        else if (direction == -1 && punchColliderLeft != null) punchColliderLeft.enabled = true;
 
         Invoke("RetractPunch", RetractPunchTime);
     }
@@ -109,6 +137,7 @@ public class EnemyMovement : MonoBehaviour
         if (UsesSR) sr.sprite = readySprite;
 
         // activate trigger zone
-        if (punchCollider != null) punchCollider.enabled = false;
+        if (punchColliderRight != null && direction == 1) punchColliderRight.enabled = false;
+        else if (direction == -1 && punchColliderLeft != null) punchColliderLeft.enabled = false;
     }
 }

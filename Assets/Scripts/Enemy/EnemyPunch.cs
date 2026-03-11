@@ -1,16 +1,29 @@
+using System;
 using UnityEngine;
 
-public class EnemyPunch : MonoBehaviour
+public class EnemyPunchTrigger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public event Action OnEnemyHit;
+
+    private void OnEnable()
     {
-        
+        OnEnemyHit += EnemyHit;
+    }
+    private void OnDisable()
+    {
+        OnEnemyHit -= EnemyHit;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.tag == "PlayerFist")
+        {
+            OnEnemyHit.Invoke();
+        }
+    }
+
+    private void EnemyHit()
+    {
+        Debug.Log("The enemy has been hit and will lose health.");
     }
 }
