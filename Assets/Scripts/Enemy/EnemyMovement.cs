@@ -1,4 +1,3 @@
-using NUnit.Framework.Internal;
 using System;
 using UnityEngine;
 
@@ -69,7 +68,7 @@ public class EnemyMovement : MonoBehaviour
         {
             if (PunchReady && PunchTimer <= 0)
             {
-                Debug.Log("Punch!");
+                // Debug.Log("Punch!");
                 PunchReady = false;
                 Punch();
             }
@@ -79,13 +78,13 @@ public class EnemyMovement : MonoBehaviour
 
             if (distance < PunchDistance && !PunchReady)
             {
-                Debug.Log("Close enough to punch. Punch ready.");
+                // Debug.Log("Close enough to punch. Punch ready.");
                 PunchReady = true;
                 PunchTimer = PunchTime;
             }
             else if (PunchReady && distance > PunchDistance + PunchDistanceBuffer)
             {
-                Debug.Log("Player outside of punch range. Punch unready.");
+                // Debug.Log("Player outside of punch range. Punch unready.");
                 PunchReady = false;
                 PunchTimer = 0;
             }

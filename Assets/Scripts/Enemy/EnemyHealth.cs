@@ -7,16 +7,17 @@ public class EnemyHealth : MonoBehaviour
     private SpriteRenderer sr;
     private bool UsesSR = false;
 
-    [SerializeField] private Sprite hitSprite;
-    [SerializeField] private Sprite readySprite;
-
     private EnemyPunchTrigger ept;
     private bool CanTakeDamage = false;
     [SerializeField] private static float MaxHealth = 5;
     [SerializeField] private float health = MaxHealth;
     [SerializeField] private float hitHealth = 1;
 
+    private Color hitColor = new Color(0.862f, 0.517f, 0.517f);
+    private Color hitColor1 = Color.paleVioletRed;
+
     public event Action OnEnemyDeath;
+    public event Action OnEnemyHit;
 
     private static List<EnemyHealth> enemyHealths = new List<EnemyHealth>();
 
@@ -25,33 +26,35 @@ public class EnemyHealth : MonoBehaviour
     {
         enemyHealths.Add(this);
 
-        if (!TryGetComponent(out ept)) Debug.Log("An Enemy could not find its EnemyPunchTrigger.");
-        else CanTakeDamage = true;
+        if (!TryGetComponent(out sr)) Debug.Log("The EnemyHealth component tried to get its SpriteRenderer but couldn't.");
+        else UsesSR = true;
     }
 
     private void OnEnable()
     {
-        ept.OnEnemyHit += EnemyHit;
+        OnEnemyHit += EnemyHit;
     }
     private void OnDisable()
     {
-        ept.OnEnemyHit -= EnemyHit;
+        OnEnemyHit -= EnemyHit;
     }
 
     private void EnemyHit()
     {
+        Debug.Log("Enemy hit inside EnemyHealth.EnemyHit()");
+
         health -= hitHealth;
         if (health <= 0) { EnemyDead(); return; }
         else if (UsesSR)
         {
-            sr.sprite = hitSprite;
+            sr.color = hitColor1;
         }
 
         Invoke("EnemyHitDone", 0.6f);
     }
     private void EnemyHitDone()
     {
-        if (UsesSR) sr.sprite = readySprite;
+        if (UsesSR) sr.color = Color.white;
     }
 
     private void EnemyDead()
@@ -59,7 +62,7 @@ public class EnemyHealth : MonoBehaviour
         // Dead enemy sprite: for now just the normal hit sprite
         if (UsesSR)
         {
-            sr.sprite = hitSprite;
+            sr.color = hitColor1;
         }
 
         Invoke("DestroyEnemy", 0.7f);
@@ -84,5 +87,10 @@ public class EnemyHealth : MonoBehaviour
         {
             yield return item;
         }
+    }
+
+    public void EnemyHitTriggered()
+    {
+        OnEnemyHit.Invoke();
     }
 }

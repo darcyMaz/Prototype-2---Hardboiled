@@ -13,6 +13,7 @@ public class PlayerPunch : MonoBehaviour
     [SerializeField] private Sprite idleFight;
     [SerializeField] private Sprite jabSprite;
     [SerializeField] private Sprite crossSprite;
+    [SerializeField] private Sprite walkSprite;
 
     // Each punch will have a minimum time extended.
     // You won't be able to turbo punch basically.
@@ -22,6 +23,8 @@ public class PlayerPunch : MonoBehaviour
 
     [SerializeField] private BoxCollider2D fistColliderL;
     [SerializeField] private BoxCollider2D fistColliderR;
+
+    private bool IsFightActive = false;
 
     private void Awake()
     {
@@ -41,6 +44,9 @@ public class PlayerPunch : MonoBehaviour
         cross.Enable();
         cross.performed += Cross;
         cross.canceled += EndPunch;
+
+        FightManager.instance.OnFightStarted += FightStarted;
+        FightManager.instance.OnFightCompleted += FightCompleted;
     }
 
     private void OnDisable()
@@ -52,58 +58,78 @@ public class PlayerPunch : MonoBehaviour
         cross.Disable();
         cross.performed -= Cross;
         cross.canceled -= EndPunch;
+
+        FightManager.instance.OnFightStarted -= FightStarted;
+        FightManager.instance.OnFightCompleted -= FightCompleted;
     }
 
     private void Update()
     {
-        PunchTimer = (PunchTimer <= 0) ? 0: PunchTimer = Time.deltaTime;
-        if (PunchDone && PunchTimer <= 0) ReadyStance();
+        if (IsFightActive)
+        {
+            if (PunchDone && PunchTimer <= 0) ReadyStance();
+            PunchTimer = (PunchTimer <= 0) ? 0 : PunchTimer - Time.deltaTime;
+        }
     }
 
     private void Jab(InputAction.CallbackContext press)
     {
-        if (UsesSR && PunchTimer <= 0)
+        if (IsFightActive && PunchTimer <= 0)
         {
-            sr.sprite = jabSprite;
+            EnableFist();
+            if (UsesSR) sr.sprite = jabSprite;
             PunchTimer = PunchTime;
             PunchDone = false;
         }
     }
     private void Cross(InputAction.CallbackContext press)
     {
-        if (UsesSR && PunchTimer <= 0)
+        if (IsFightActive && PunchTimer <= 0)
         {
             EnableFist();
-            sr.sprite = crossSprite;
+            if (UsesSR) sr.sprite = crossSprite;
             PunchTimer = PunchTime;
+            PunchDone = false;
         }
     }
 
     private void EndPunch(InputAction.CallbackContext release)
     {
-        PunchDone = true;
+        if (IsFightActive) PunchDone = true;
     }
 
     private void ReadyStance()
     {
-        if (UsesSR && sr.sprite != idleFight)
+        if (IsFightActive && sr.sprite != idleFight)
         {
-            sr.sprite = idleFight;
+            if (UsesSR) sr.sprite = idleFight;
         }
     }
 
     private void EnableFist()
     {
-        if (sr.flipX) fistColliderL.enabled = true;
-        else fistColliderR.enabled = true;
+        if (IsFightActive)
+        {
+            if (sr.flipX) fistColliderL.enabled = true;
+            else fistColliderR.enabled = true;
 
-        // Disabling the fist is seperate from the sprite as the fist won't hurt just sitting there in the air.
-        Invoke("DisableFists", 0.2f);
+            // Disabling the fist is seperate from the sprite as the fist won't hurt just sitting there in the air.
+            Invoke("DisableFists", 0.2f);
+        }
     }
 
     private void DisableFists()
     {
         fistColliderL.enabled = false;
         fistColliderR.enabled = false;
+    }
+
+    private void FightStarted()
+    {
+        IsFightActive = true;
+    }
+    private void FightCompleted()
+    {
+        IsFightActive = false;
     }
 }

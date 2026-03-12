@@ -446,6 +446,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 247232003}
+  - component: {fileID: 247232004}
   m_Layer: 0
   m_Name: FightManager
   m_TagString: Untagged
@@ -468,6 +469,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &247232004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247232002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18fa17c1e5cdb1c4ab6cee348fbbe4b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FightManager
+  FightDiscussion: {fileID: 1109790555}
 --- !u!1 &356579563
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,6 +888,7 @@ GameObject:
   - component: {fileID: 493514636}
   - component: {fileID: 493514638}
   - component: {fileID: 493514637}
+  - component: {fileID: 493514639}
   m_Layer: 0
   m_Name: Punch Right
   m_TagString: Untagged
@@ -1001,6 +1016,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &493514639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493514635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c69931e1ef6c8ec4ca0394e8640c53bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPunchTrigger
 --- !u!1 &589990516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,6 +1039,7 @@ GameObject:
   - component: {fileID: 589990519}
   - component: {fileID: 589990518}
   - component: {fileID: 589990517}
+  - component: {fileID: 589990520}
   m_Layer: 0
   m_Name: Punch Left
   m_TagString: Untagged
@@ -1139,6 +1167,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 650796026}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &589990520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589990516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c69931e1ef6c8ec4ca0394e8640c53bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPunchTrigger
 --- !u!1 &590197658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1190,7 @@ GameObject:
   - component: {fileID: 590197659}
   - component: {fileID: 590197661}
   - component: {fileID: 590197660}
+  - component: {fileID: 590197662}
   m_Layer: 0
   m_Name: Fist R
   m_TagString: Untagged
@@ -1277,6 +1318,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &590197662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590197658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381a38284957eca43b89b96d29aa1cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPunchTrigger
 --- !u!1 &650796023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,10 +1343,10 @@ GameObject:
   - component: {fileID: 650796024}
   - component: {fileID: 650796027}
   - component: {fileID: 650796028}
-  - component: {fileID: 650796029}
+  - component: {fileID: 650796030}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1470,7 +1523,7 @@ MonoBehaviour:
   readySprite: {fileID: -2701818915754415745, guid: 190442fb6c164f340a91b11d61745412, type: 3}
   punchColliderRight: {fileID: 493514637}
   punchColliderLeft: {fileID: 589990517}
---- !u!114 &650796029
+--- !u!114 &650796030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1479,9 +1532,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 650796023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c69931e1ef6c8ec4ca0394e8640c53bf, type: 3}
+  m_Script: {fileID: 11500000, guid: b527ab70f62e34f41b566beafeea5c65, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyPunchTrigger
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  health: 5
+  hitHealth: 1
 --- !u!1 &691184995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,6 +1998,9 @@ GameObject:
   - component: {fileID: 1109790557}
   - component: {fileID: 1109790556}
   - component: {fileID: 1109790555}
+  - component: {fileID: 1109790559}
+  - component: {fileID: 1109790558}
+  - component: {fileID: 1109790560}
   m_Layer: 0
   m_Name: Enemy Dialogue
   m_TagString: Untagged
@@ -2039,6 +2097,78 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1109790558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109790554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05acc853c4cf2cc47941b24462956f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractUI
+  uiBG: {fileID: 406372094}
+  uiText: {fileID: 356579565}
+--- !u!114 &1109790559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109790554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31226223954dabe45959554ab83a2e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractOverlap
+--- !u!61 &1109790560
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109790554}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!4 &1128195884 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2059741103392930098, guid: eafd318f976b4c747a633d975e52059f, type: 3}
@@ -2256,10 +2386,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5765943374086692941, guid: eafd318f976b4c747a633d975e52059f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1480394756}
+      addedObject: {fileID: 1480394755}
     - targetCorrespondingSourceObject: {fileID: 5765943374086692941, guid: eafd318f976b4c747a633d975e52059f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1480394755}
+      addedObject: {fileID: 1480394761}
   m_SourcePrefab: {fileID: 100100000, guid: eafd318f976b4c747a633d975e52059f, type: 3}
 --- !u!1 &1480394754 stripped
 GameObject:
@@ -2281,9 +2411,10 @@ MonoBehaviour:
   idleFight: {fileID: -2701818915754415745, guid: 3fd67f31bd644e247a0148b0802b5181, type: 3}
   jabSprite: {fileID: -4067814388406995886, guid: 6662aa12f2778ea43a6a339e5e249709, type: 3}
   crossSprite: {fileID: 6897004329130692585, guid: 3ff073ab886d1af4a9dd8a02959c0261, type: 3}
+  walkSprite: {fileID: 805879011720009521, guid: a48260c4a9a2f214e8e1b936c587ee1a, type: 3}
   fistColliderL: {fileID: 1890805011}
   fistColliderR: {fileID: 590197660}
---- !u!114 &1480394756
+--- !u!114 &1480394761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2292,11 +2423,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1480394754}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc33f96d694afbe4a83233297030599f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cc4f4e2a0c0246439b3fced17f4d602, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerFight
-  idleFightSprite: {fileID: -2701818915754415745, guid: 3fd67f31bd644e247a0148b0802b5181, type: 3}
-  walkSprite: {fileID: 805879011720009521, guid: a48260c4a9a2f214e8e1b936c587ee1a, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 10
+  hitHealth: 1
 --- !u!1 &1613875049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2547,6 +2678,7 @@ GameObject:
   - component: {fileID: 1890805010}
   - component: {fileID: 1890805012}
   - component: {fileID: 1890805011}
+  - component: {fileID: 1890805013}
   m_Layer: 0
   m_Name: Fist L
   m_TagString: Untagged
@@ -2674,6 +2806,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1890805013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890805009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381a38284957eca43b89b96d29aa1cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPunchTrigger
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

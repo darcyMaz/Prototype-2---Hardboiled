@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.Playables;
 
-public class EnemyPunchTrigger : MonoBehaviour
+public class PlayerPunchTrigger : MonoBehaviour
 {
     public event Action OnEnemyHit;
 
@@ -16,8 +17,14 @@ public class EnemyPunchTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "PlayerFist")
+        if (collision.gameObject.tag == "Enemy")
         {
+            EnemyHealth eh;
+            if (!collision.gameObject.TryGetComponent(out eh)) Debug.Log("A PlayerPunchTrigger should be able to find the Enemy's EnemyHealth but can't.");
+            else
+            {
+                eh.EnemyHitTriggered();
+            }
             OnEnemyHit.Invoke();
         }
     }
