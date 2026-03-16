@@ -7,13 +7,10 @@ public class EnemyHealth : MonoBehaviour
     private SpriteRenderer sr;
     private bool UsesSR = false;
 
-    private EnemyPunchTrigger ept;
-    private bool CanTakeDamage = false;
     [SerializeField] private static float MaxHealth = 5;
     [SerializeField] private float health = MaxHealth;
     [SerializeField] private float hitHealth = 1;
 
-    private Color hitColor = new Color(0.862f, 0.517f, 0.517f);
     private Color hitColor1 = Color.paleVioletRed;
 
     public event Action OnEnemyDeath;
@@ -21,7 +18,6 @@ public class EnemyHealth : MonoBehaviour
 
     private static List<EnemyHealth> enemyHealths = new List<EnemyHealth>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         enemyHealths.Add(this);
@@ -41,7 +37,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void EnemyHit()
     {
-        Debug.Log("Enemy hit inside EnemyHealth.EnemyHit()");
+        // Debug.Log("Enemy hit inside EnemyHealth.EnemyHit()");
 
         health -= hitHealth;
         if (health <= 0) { EnemyDead(); return; }

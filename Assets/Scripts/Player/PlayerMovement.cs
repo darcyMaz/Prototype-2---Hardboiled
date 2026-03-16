@@ -22,9 +22,24 @@ public class PlayerMovement : MonoBehaviour
 
     private float MinSpeed = 0.01f;
 
+    private PlayerKnockback pkb;
+    private bool UsesKB = false;
+
     private void Awake()
     {
         projectActions = new ProjectActions();
+
+        if (!TryGetComponent(out rb)) { Debug.Log("Rigidbody2D could not be found on the player. Disabling the RigidBody2D for this object."); }
+        else IsRBOn = true;
+
+        if (!TryGetComponent(out sr)) { Debug.Log("SpriteRenderer could not be found on the player. Disabling the SpriteRenderer for this object."); }
+        else IsSROn = true;
+
+        if (!TryGetComponent(out plm)) { Debug.Log("PlayerLockMovement could not be found on the player. Disabling the Player movement lock for this object."); }
+        else IsMoveLockOn = true;
+
+        if (!TryGetComponent(out pkb)) { Debug.Log("PlayerKnockback could not be found on the player. If this is not a fighting scene, then ignore this message."); }
+        else UsesKB = true;
     }
 
     private void OnEnable()
@@ -41,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
             plm.OnUnlockMovement += EnableMove;
         }
         
+        if (UsesKB) pkb.OnPlayerKnockback += KnockbackPlayer;
+        
     }
     private void OnDisable()
     {
@@ -54,19 +71,8 @@ public class PlayerMovement : MonoBehaviour
             plm.OnLockMovement -= DisableMove;
             plm.OnUnlockMovement -= EnableMove;
         }
-    }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        if (!TryGetComponent(out rb)) { Debug.Log("Rigidbody2D could not be found on the player. Disabling the RigidBody2D for this object."); }
-        else IsRBOn = true;
-
-        if (!TryGetComponent(out sr)) { Debug.Log("SpriteRenderer could not be found on the player. Disabling the SpriteRenderer for this object."); }
-        else IsSROn = true;
-
-        if (!TryGetComponent(out plm)) { Debug.Log("PlayerLockMovement could not be found on the player. Disabling the Player movement lock for this object."); }
-        else IsMoveLockOn = true;
+        if (UsesKB) pkb.OnPlayerKnockback -= KnockbackPlayer;
     }
 
     // Update is called once per frame
@@ -116,5 +122,16 @@ public class PlayerMovement : MonoBehaviour
     private void DisableMove()
     {
         IsRBOn = false;
+    }
+
+    private void KnockbackPlayer(Knockback kb)
+    {
+        // Debug.Log("KnockbackPlayer in PlayerMovement");
+
+        DisableMove();
+
+        rb.linearVelocity = new Vector2(kb.velocity.x, kb.velocity.y);
+
+        Invoke("EnableMove", kb.time);
     }
 }

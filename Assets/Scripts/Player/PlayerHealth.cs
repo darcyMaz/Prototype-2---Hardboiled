@@ -5,14 +5,20 @@ public class PlayerHealth : MonoBehaviour
 { 
     private SpriteRenderer sr; 
     private bool UsesSR = false; 
-    private bool CanTakeDamage = false; 
+    // private bool CanTakeDamage = false; 
     [SerializeField] private static float MaxHealth = 5; 
     [SerializeField] private float health = MaxHealth; 
-    [SerializeField] private float hitHealth = 1; 
+    [SerializeField] private int hitHealth = 1; 
     private Color hitColor = new Color(0.862f, 0.517f, 0.517f); 
     public event Action OnPlayerDeath; 
-    public event Action OnPlayerHit; 
-    
+    public event Action <int> OnPlayerHit;
+
+    private void Awake()
+    {
+        if (!TryGetComponent(out sr)) Debug.Log("The PlayerHealth script could not find the Player's SpriteRenderer component.");
+        else UsesSR = true;
+    }
+
     private void OnEnable() 
     { 
         OnPlayerHit += PlayerHit; 
@@ -21,9 +27,9 @@ public class PlayerHealth : MonoBehaviour
     { 
         OnPlayerHit -= PlayerHit; 
     } 
-    private void PlayerHit() 
+    private void PlayerHit(int damage) 
     { 
-        health -= hitHealth; 
+        health -= damage; 
         if (health <= 0) 
         { 
             PlayerDeath(); return; 
@@ -61,6 +67,6 @@ public class PlayerHealth : MonoBehaviour
     }     
     public void PlayerHitTriggered()     
     {         
-        OnPlayerHit.Invoke();     
+        OnPlayerHit.Invoke(hitHealth);     
     } 
 }

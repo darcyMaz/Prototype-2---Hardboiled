@@ -6,28 +6,23 @@ public class InteractOverlap : MonoBehaviour
     public event Action OnOverlap;
     public event Action OnOverlapEnd;
 
+    private bool Exited = true;
 
-
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other != null && other.tag == "Player") OnOverlap.Invoke();
+        if (other != null && other.tag == "Player" && Exited)
+        {
+            OnOverlap?.Invoke();
+            Exited = false;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision != null && collision.tag == "Player")
         {
-            try
-            {
-                OnOverlapEnd.Invoke();
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.Log("InteractOverlap tried to invoke an event but it had no subscribers. Likely due to the subscribers being disabled at the closing of a scene.");
-            }
-            
+            Exited = true;
+            OnOverlapEnd?.Invoke();
         }
     }
-
-
 }

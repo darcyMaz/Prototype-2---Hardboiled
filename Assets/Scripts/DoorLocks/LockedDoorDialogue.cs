@@ -12,6 +12,7 @@ public class LockedDoorDialogue : MonoBehaviour
         if (!TryGetComponent(out it)) Debug.Log("A LockedDoorDialogue component could not find its respective InteractTransition component.");
     }
 
+    // This is not good form. Should have an event.
     // Update is called once per frame
     void Update()
     {

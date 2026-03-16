@@ -4,6 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Dialogue is a class allowing the player to interact with and initiate a conversation with a BoxCollider2D represented by NPCs or doors.
+/// This class should be generalized so that it does not only activate on Interact.
+/// 
+/// Dialogue should be the super or abstract class of DialogueOnInteract, DialogueOnFightEnd, DialogueOnFightStart, etc.
+///
+/// </summary>
 public class Dialogue : MonoBehaviour
 {
     private InteractOverlap interactOverlap;
@@ -28,17 +35,19 @@ public class Dialogue : MonoBehaviour
 
     private static List<Dialogue> dialogues = new List<Dialogue>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        if (imageUI == null) Debug.Log("A Dialogue component tried to access the Image component on the canvas. It may not be assigned in the inspector.");
-        else if (textUI == null) Debug.Log("The Dialogue component tried to find the TextMesh component on the canvas. It may not be assigned in the inspector.");
-        else UsesDialogue = true;
-    }
+    private LockDialogue lockDialogue;
+    private bool CanLock = false;
 
     private void Awake()
     {
         dialogues.Add(this);
+
+        if (imageUI == null) Debug.Log("A Dialogue component tried to access the Image component on the canvas. It may not be assigned in the inspector.");
+        else if (textUI == null) Debug.Log("The Dialogue component tried to find the TextMesh component on the canvas. It may not be assigned in the inspector.");
+        else UsesDialogue = true;
+
+        if (!TryGetComponent(out lockDialogue)) Debug.Log("A Dialogue Component could not find its LockDialogue. It may not have one.");
+        else CanLock = true;
 
         if (!TryGetComponent(out interactOverlap)) Debug.Log("A Dialogue component tried to find the InteractOverlap. This object may not have it as a component");
 
@@ -64,6 +73,11 @@ public class Dialogue : MonoBehaviour
             interactOverlap.OnOverlapEnd += UnreadyDialogue;
         }
 
+        if (CanLock)
+        {
+            lockDialogue.OnFlipLockDialogue += FlipDialogueLock;
+        }
+
         PlayerInteract.OnInteractPressed += DialoguePressed;
 
     }
@@ -73,6 +87,11 @@ public class Dialogue : MonoBehaviour
         {
             interactOverlap.OnOverlap -= ReadyDialogue;
             interactOverlap.OnOverlapEnd -= UnreadyDialogue;
+        }
+
+        if (CanLock)
+        {
+            lockDialogue.OnFlipLockDialogue += FlipDialogueLock;
         }
 
         PlayerInteract.OnInteractPressed -= DialoguePressed;
@@ -121,15 +140,8 @@ public class Dialogue : MonoBehaviour
                 }
             }
 
-            // May want to put code directly below this into its own function. 
-            try
-            {
-                OnDialogueStarted.Invoke();
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.Log("A dialogue component's OnDialogueStarted event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
-            }
+
+            OnDialogueStarted?.Invoke();
             DialogueStarted = true;
             OpenDialogueBox();
             SendDialogue(lines[lineIndex]);
@@ -141,15 +153,7 @@ public class Dialogue : MonoBehaviour
             {
                 lineIndex = EODIndex + 1;
                 CloseDialogueBox();
-
-                try
-                {
-                    OnDialogueClosed.Invoke();
-                }
-                catch (NullReferenceException e)
-                {
-                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
-                }
+                OnDialogueClosed?.Invoke();
             }
             else if (lines[lineIndex] == "EOD")
             {
@@ -158,37 +162,18 @@ public class Dialogue : MonoBehaviour
                 MainDialogueDone = true;
                 lineIndex++;
 
-                // Dialogue components will not always have subscribers.
-                // Invoking an event without subscribers causes an error. So we do this.
-                try
+                if (lineIndex == lines.Length)
                 {
                     OnDialogueDone.Invoke();
                 }
-                catch (NullReferenceException e)
-                {
-                    Debug.Log("A dialogue component's DialogueDone event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
-                }
-                try
-                {
-                    OnDialogueClosed.Invoke();
-                }
-                catch (NullReferenceException e)
-                {
-                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
-                }
-
+                else OnDialogueDone?.Invoke();
+                OnDialogueClosed?.Invoke();
             }
             else if (MainDialogueDone)
             {
                 CloseDialogueBox();
-                try
-                {
-                    OnDialogueClosed.Invoke();
-                }
-                catch (NullReferenceException e)
-                {
-                    Debug.Log("A dialogue component's OnDialogueClosed event has no subscribers. It would have caused the following error (no issue here): " + e.Message);
-                }
+                OnDialogueClosed?.Invoke();
+
             }
             else 
             {
@@ -215,6 +200,11 @@ public class Dialogue : MonoBehaviour
         imageUI.color = new Color(imageUI.color.r, imageUI.color.g, imageUI.color.b, 0);
         SendDialogue("");
         DialogueStarted = false;
+    }
+
+    private void FlipDialogueLock()
+    {
+        UsesDialogue = (UsesDialogue) ? false : true;
     }
 
     public static IEnumerable<Dialogue> GetEnabledDialogues()

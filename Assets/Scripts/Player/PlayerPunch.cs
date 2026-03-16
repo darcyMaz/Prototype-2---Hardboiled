@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ public class PlayerPunch : MonoBehaviour
     private ProjectActions projActions;
     private InputAction jab;
     private InputAction cross;
+    private InputAction hook;
 
     private SpriteRenderer sr;
     private bool UsesSR = false;
@@ -13,18 +15,24 @@ public class PlayerPunch : MonoBehaviour
     [SerializeField] private Sprite idleFight;
     [SerializeField] private Sprite jabSprite;
     [SerializeField] private Sprite crossSprite;
+    [SerializeField] private Sprite hookSprite;
     [SerializeField] private Sprite walkSprite;
 
     // Each punch will have a minimum time extended.
     // You won't be able to turbo punch basically.
-    private float PunchTime = 0.4f;
+    [SerializeField] private float PunchTime = 0.4f;
     private float PunchTimer = 0f;
     private bool PunchDone = true;
 
-    [SerializeField] private BoxCollider2D fistColliderL;
-    [SerializeField] private BoxCollider2D fistColliderR;
+    // The amount of time that the punch can hurt the enemy.
+    [SerializeField] private float PunchLandTime = 0.2f;
+
+    [SerializeField] private BoxCollider2D fistCollider;
 
     private bool IsFightActive = false;
+
+    public event Action <PunchType> OnPunch;
+    public event Action OnPunchComplete;
 
     private void Awake()
     {
@@ -36,6 +44,7 @@ public class PlayerPunch : MonoBehaviour
     {
         jab = projActions.Player.Jab;
         cross = projActions.Player.Cross;
+        hook = projActions.Player.Hook;
 
         jab.Enable();
         jab.performed += Jab;
@@ -44,6 +53,10 @@ public class PlayerPunch : MonoBehaviour
         cross.Enable();
         cross.performed += Cross;
         cross.canceled += EndPunch;
+
+        hook.Enable();
+        hook.performed += Hook;
+        hook.canceled += EndPunch;
 
         FightManager.instance.OnFightStarted += FightStarted;
         FightManager.instance.OnFightCompleted += FightCompleted;
@@ -76,7 +89,7 @@ public class PlayerPunch : MonoBehaviour
     {
         if (IsFightActive && PunchTimer <= 0)
         {
-            EnableFist();
+            EnableFist(PunchType.Jab);
             if (UsesSR) sr.sprite = jabSprite;
             PunchTimer = PunchTime;
             PunchDone = false;
@@ -86,10 +99,30 @@ public class PlayerPunch : MonoBehaviour
     {
         if (IsFightActive && PunchTimer <= 0)
         {
-            EnableFist();
+            EnableFist(PunchType.Cross);
             if (UsesSR) sr.sprite = crossSprite;
             PunchTimer = PunchTime;
             PunchDone = false;
+        }
+    }
+    private void Hook(InputAction.CallbackContext press)
+    {
+        if (IsFightActive && PunchTimer <= 0)
+        {
+            EnableFist(PunchType.Hook);
+            if (UsesSR) sr.sprite = hookSprite;
+            PunchTimer = PunchTime;
+            PunchDone = false;
+        }
+    }
+    private void EnableFist(PunchType pt)
+    {
+        if (IsFightActive)
+        {
+            OnPunch.Invoke(pt);
+
+            // Disabling the fist is seperate from the sprite as the fist won't hurt just sitting there in the air.
+            Invoke("DisableFists", PunchLandTime);
         }
     }
 
@@ -106,23 +139,12 @@ public class PlayerPunch : MonoBehaviour
         }
     }
 
-    private void EnableFist()
-    {
-        if (IsFightActive)
-        {
-            if (sr.flipX) fistColliderL.enabled = true;
-            else fistColliderR.enabled = true;
-
-            // Disabling the fist is seperate from the sprite as the fist won't hurt just sitting there in the air.
-            Invoke("DisableFists", 0.2f);
-        }
-    }
-
+    
     private void DisableFists()
     {
-        fistColliderL.enabled = false;
-        fistColliderR.enabled = false;
+        OnPunchComplete.Invoke();
     }
+    
 
     private void FightStarted()
     {
@@ -131,5 +153,7 @@ public class PlayerPunch : MonoBehaviour
     private void FightCompleted()
     {
         IsFightActive = false;
+        // DisableFists();
+        if (UsesSR) sr.sprite = walkSprite;
     }
 }
