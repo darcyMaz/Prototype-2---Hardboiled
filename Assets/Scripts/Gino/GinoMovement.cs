@@ -13,18 +13,19 @@ public class GinoMovement : MonoBehaviour
     private GinoStartMovement GSM;
     private bool CanFollow = true;
     private bool Follows = true;
-    private bool FollowOnDialogue = false;
+    private bool FollowHasCondition = false;
 
     private void OnEnable()
     {
-        if (FollowOnDialogue)
+        if (FollowHasCondition)
         {
+            Follows = false;
             GSM.OnGinoStartMovement += LetFollow;
         }
     }
     private void OnDisable()
     {
-        if (FollowOnDialogue)
+        if (FollowHasCondition)
         {
             GSM.OnGinoStartMovement -= LetFollow;
         }
@@ -46,10 +47,11 @@ public class GinoMovement : MonoBehaviour
 
         if (!TryGetComponent(out GSM))
         {
-            Debug.Log("The GinoMovement component does not have a Dialogue connected to it. Movement will be allowed right away.");
-            Follows = false;
+            Debug.Log("The GinoMovement component does not have a GinoStartMovement connected to it. Movement will be allowed right away.");
         }
-        else FollowOnDialogue = true;
+        else FollowHasCondition = true;
+
+        Debug.Log("Follow has condition: " + FollowHasCondition + " Follows: " + Follows);
     }
 
     private void Update()
@@ -61,7 +63,7 @@ public class GinoMovement : MonoBehaviour
     // Movememnt could be improved with proper smoothdamp, accel decel, whatever.
     private void FixedUpdate()
     {
-        if (!CanFollow && !Follows) return;
+        if (!CanFollow || !Follows) return;
 
         // 1) Calculate the buffer point
         //    P---buffer point---G    <-- buffer distance is three dashes, P is the target and G is Gino.

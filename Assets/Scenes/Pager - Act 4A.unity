@@ -1245,8 +1245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea6a28d95ca85449a07b0882f23379e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PagerTextMovement
-  MaxX: 935
-  MinX: 520
+  MaxX: 1300
+  MinX: -200
   SmoothTime: 80
   MaxSpeed: 125
 --- !u!1 &1303127918

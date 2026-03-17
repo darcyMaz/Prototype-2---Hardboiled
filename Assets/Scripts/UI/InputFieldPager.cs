@@ -31,7 +31,7 @@ public class InputFieldPager : MonoBehaviour
     {
         if (ChangeSceneTimer <= 0f && CanSceneChange)
         {
-            SceneManager.Instance.BufferSceneChange("Bar - Act4B");
+            SceneManager.Instance.BufferSceneChange("Bar - Act 4B");
 
             // We only want to buffer the scene once so make sure to make this bool false.
             CanSceneChange = false;
