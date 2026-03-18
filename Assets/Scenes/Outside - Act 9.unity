@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c07554ced561d418bb20c58749499b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractTransition
-  NextScene: The End
+  NextScene: End Menu
   isDoorLocked: 0
 --- !u!114 &590494323
 MonoBehaviour:

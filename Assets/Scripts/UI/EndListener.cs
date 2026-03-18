@@ -2,10 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MMStartListener : MonoBehaviour
+public class EndListener : MonoBehaviour
 {
     private ProjectActions inputActions;
     private InputAction start;
+    private InputAction end;
 
     private void Awake()
     {
@@ -13,22 +14,30 @@ public class MMStartListener : MonoBehaviour
     }
     private void OnEnable()
     {
-        start = inputActions.Player.Interact;
+        start = inputActions.UI.Start;
         start.Enable();
-
         start.performed += StartGame;
+
+        end = inputActions.UI.Quit;
+        end.Enable();
+        end.performed += EndGame;
     }
     private void OnDisable()
     {
         start.performed -= StartGame;
         start.Disable();
+
+        end.performed -= EndGame;
+        end.Disable();
     }
 
     private void StartGame(InputAction.CallbackContext context)
     {
-        SceneManager.Instance.BufferSceneChange("Outside - Act 1");
+        SceneManager.Instance.BufferSceneChange("Start Menu");
     }
 
-
-
+    private void EndGame(InputAction.CallbackContext context)
+    {
+        if (context.performed) Application.Quit();
+    }
 }
