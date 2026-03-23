@@ -1,9 +1,12 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class EnemyPunchTrigger : MonoBehaviour
 {
     public event Action OnPlayerHit;
+
+    private static List<EnemyPunchTrigger> ept_list = new List<EnemyPunchTrigger>();
 
     private SpriteRenderer sr;
     private bool UsesSR = false;
@@ -26,6 +29,8 @@ public class EnemyPunchTrigger : MonoBehaviour
 
         ep = GetComponentInParent<EnemyMovement>();
         if (ep == null) { Debug.Log("The PlayerPunchTrigger could not find the PlayerPunch in the player."); }
+
+        ept_list.Add(this);
     }
 
     private void OnEnable()
@@ -100,4 +105,12 @@ public class EnemyPunchTrigger : MonoBehaviour
         IsPunching = false;
     }
 
+
+    public static IEnumerable<EnemyPunchTrigger> GetEPTs()
+    {
+        foreach (EnemyPunchTrigger item in ept_list)
+        {
+            yield return item;
+        }
+    }
 }

@@ -42,6 +42,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Outside - Act 9.unity
     guid: b3de1d4993837334aad0781ec7cc7b8b
   - enabled: 1
+    path: Assets/Scenes/Player Death.unity
+    guid: b7742c4701caaf749b061b0d36b72e7b
+  - enabled: 1
     path: Assets/Scenes/End Menu.unity
     guid: 66878e427dce4534f97a8b7b23491c53
   m_configObjects:

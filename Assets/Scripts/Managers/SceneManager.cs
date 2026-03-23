@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-// Not to self: UnityEngine.SceneManagement.SceneManager is clearly, the same name as my SceneManager. Careful with that in the future.
+// Not to self: UnityEngine.SceneManagement.SceneManager is the same name as my SceneManager. Careful with that in the future.
 public class SceneManager : MonoBehaviour
 {
     public static SceneManager Instance { get; private set; }
     public event Action OnSceneChange;
-
     private Queue SceneBuffer;
+    private string PreviousSceneName = "Start Menu";
 
     private void Awake()
     {
@@ -21,6 +21,8 @@ public class SceneManager : MonoBehaviour
 
         OnSceneChange += ChangeScene;
         SceneBuffer = new Queue();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
@@ -41,6 +43,7 @@ public class SceneManager : MonoBehaviour
         try 
         {
             string nextScene = (string)SceneBuffer.Dequeue();
+            PreviousSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             UnityEngine.SceneManagement.SceneManager.LoadScene(nextScene);
         }
         catch (InvalidCastException ive)
@@ -57,4 +60,8 @@ public class SceneManager : MonoBehaviour
         SceneBuffer.Clear();
     }
 
+    public string GetPreviousSceneName()
+    {
+        return PreviousSceneName;
+    }
 }

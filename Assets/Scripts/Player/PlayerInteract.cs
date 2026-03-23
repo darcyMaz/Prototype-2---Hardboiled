@@ -8,7 +8,7 @@ public class PlayerInteract : MonoBehaviour
     private ProjectActions projectActions;
     private InputAction interact;
 
-    
+    private bool IsPaused = false;
 
     private void Awake()
     {
@@ -20,16 +20,28 @@ public class PlayerInteract : MonoBehaviour
         interact.Enable();
         interact.performed += InteractPressed;
 
+        PauseManager.instance.OnPause += GamePaused;
+        PauseManager.instance.OnPauseEnd += GameUnpaused;
     }
     private void OnDisable()
     {
         interact.Disable();
+
+        PauseManager.instance.OnPause -= GamePaused;
+        PauseManager.instance.OnPauseEnd -= GameUnpaused;
     }
 
     private void InteractPressed(InputAction.CallbackContext action)
     {
-        OnInteractPressed.Invoke();
+        if (!IsPaused) OnInteractPressed?.Invoke();
     }
 
-
+    private void GamePaused()
+    {
+        IsPaused = true;
+    }
+    private void GameUnpaused()
+    {
+        IsPaused = false;
+    }
 }

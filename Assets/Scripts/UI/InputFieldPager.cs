@@ -18,7 +18,9 @@ public class InputFieldPager : MonoBehaviour
     private string[] solutions =
     {
         "test",
-        "meet in alley by factory now"
+        "meet in alley by factory now",
+        "m-e-e-t i-n a-l-l-e-y b-y f-a-c-t-o-r-y n-o-w",
+        "m-e-e-t-i-n-a-l-l-e-y-b-y-f-a-c-t-o-r-y-n-o-w"
     };
 
     private void Awake()

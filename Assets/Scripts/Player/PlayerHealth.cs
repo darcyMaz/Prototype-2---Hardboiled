@@ -50,8 +50,9 @@ public class PlayerHealth : MonoBehaviour
         if (UsesSR)
         {
               sr.color = hitColor; // sr.sprite = hitSprite;
-        }          
-        Invoke("DestroyPlayer", 0.7f);     
+        }
+        // Invoke("DestroyPlayer", 0.7f);
+        OnPlayerDeath?.Invoke();
     }     
     private void DestroyPlayer()     
     {         

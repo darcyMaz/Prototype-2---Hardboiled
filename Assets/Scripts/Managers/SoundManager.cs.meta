@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1189d842e7402774d92e38af16d113e6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - outsideBG: {instanceID: 0}
+  - barBG: {instanceID: 0}
+  - PlayerHit: {instanceID: 0}
+  - EnemyHit: {instanceID: 0}
+  - EnemyHit2: {instanceID: 0}
+  - BG: {instanceID: 0}
+  - SFX: {instanceID: 0}
+  - PlayerPunchTrigger: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

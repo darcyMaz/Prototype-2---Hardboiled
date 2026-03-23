@@ -65,15 +65,8 @@ public class EnemyHealth : MonoBehaviour
     }
     private void DestroyEnemy()
     {
-        try
-        {
-            OnEnemyDeath.Invoke();
-        }
-        catch (NullReferenceException e)
-        {
-            Debug.Log("An Enemy died without subscribers to its OnEnemyDead event. This behaviour may be normal.\n" + e.Message);
-        }
-        
+        OnEnemyDeath?.Invoke();
+        enemyHealths.Remove(this);
         Destroy(gameObject);
     }
 

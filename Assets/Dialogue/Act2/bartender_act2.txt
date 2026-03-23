@@ -10,7 +10,8 @@ B: I wasn't working last night, but I'll call the girl that was. His name was Gi
 P: Yeah, she might know him as Gigi.
 B: Oh yeah! Gigi! He's so funny that guy.
 P: hmm...
-B: Ok look, I've gotta make a Mojito for that couple but I'm out of lime juice. If you go to the Bodega at the corner and get some for me, I'll have called her by the time you get back. You good with that?
+B: Ok look, I've gotta make a Mojito for that couple but I'm out of lime juice. If you go to the Bodega at the corner and get some for me...
+B: I'll have called her by the time you get back. You good with that?
 P: I suppose this counts as my favor.
 B: Awesome, thanks so much! I'll see you in a minute. Remember, the bodega at the corner!
 EOD

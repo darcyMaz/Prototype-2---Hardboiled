@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InteractPrompt
   - Enemy
+  - Manager
   layers:
   - Default
   - TransparentFX

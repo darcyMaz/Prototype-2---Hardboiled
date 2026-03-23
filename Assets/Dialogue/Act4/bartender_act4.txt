@@ -7,6 +7,7 @@ Bartender: Is something wrong with the pager?
 P: Are you able to read these pager codes?
 Bartender: Sorry, I've never used one in my life.
 Patron: i ca- *burb* can.
-P & B: ... (imagine that the player sprite turns to the left)
-Patron: I've had one of them beepers since they came out in the 70s... I'm an ex-*burp*-pert. Give me a pen and paper and I'll write it out for you.
+P & Bartender: ... (imagine that the player sprite turns to the left)
+Patron: I've had one of them beepers since they came out in the 70s... I'm an ex-*burp*-pert... 
+Patron: Give me a pen and paper and I'll write it out for you.
 EOD

@@ -9,11 +9,13 @@ public class GinoMovement : MonoBehaviour
     [SerializeField] private float topSpeed = 4f; // This should be the same as the player's speed.
     private float direction = 0;
     [SerializeField] private float smoothDamp = 1f;
+    private SpriteRenderer spriteRenderer;
 
     private GinoStartMovement GSM;
     private bool CanFollow = true;
     private bool Follows = true;
     private bool FollowHasCondition = false;
+    private bool UsesSR = false;
 
     private void OnEnable()
     {
@@ -51,13 +53,21 @@ public class GinoMovement : MonoBehaviour
         }
         else FollowHasCondition = true;
 
-        Debug.Log("Follow has condition: " + FollowHasCondition + " Follows: " + Follows);
+        if (!TryGetComponent(out spriteRenderer)) Debug.Log("The GinoMovement component could not find its SpriteRenderer.");
+        else UsesSR = true;
     }
 
     private void Update()
     {
         // If player is to the right, -1. If player is to the left, 1. Whatever.
         direction = Mathf.Sign(transform.position.x - target.position.x);
+        
+        if (UsesSR)
+        {
+            if (direction == 1) spriteRenderer.flipX = true;
+            else if (direction == -1) spriteRenderer.flipX = false;
+        }
+
     }
 
     // Movememnt could be improved with proper smoothdamp, accel decel, whatever.
@@ -79,7 +89,6 @@ public class GinoMovement : MonoBehaviour
         if (Mathf.Abs(transform.position.x - buffer_point) < BufferDistance)
         {
             // Debug.Log(1);
-
             if (direction == 1 && buffer_point < transform.position.x || direction == -1 && buffer_point > transform.position.x)
             {
                 // Debug.Log(2);
