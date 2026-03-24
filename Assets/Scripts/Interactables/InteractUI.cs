@@ -18,6 +18,9 @@ public class InteractUI : MonoBehaviour
     private LockDialogue lockDialogue;
     private bool CanLockUI;
 
+    private DepTransition depTransition;
+    private bool CanDepTransition = false;
+
     private void Awake()
     {
         if (!TryGetComponent(out InteractOverlap)) Debug.Log("A DoorUI object tried to get a DoorOverlap component from the same GameObject.");
@@ -30,6 +33,12 @@ public class InteractUI : MonoBehaviour
 
         if (!TryGetComponent(out lockDialogue)) Debug.Log("An InteractUI component could not find a LockDialogue. It may not have intentionally.");
         else CanLockUI = true;
+
+        if (TryGetComponent(out depTransition))
+        {
+            Debug.Log("An InteractUI component in this scene has a DepTransition component.");
+            CanDepTransition = true;
+        }
     }
 
     private void OnEnable()
@@ -49,6 +58,11 @@ public class InteractUI : MonoBehaviour
         {
             lockDialogue.OnFlipLockDialogue += LockUI;
         }
+
+        if (CanDepTransition)
+        {
+            DepTransition.OnDepEntry += DisableUI;
+        }
     }
 
     private void OnDisable()
@@ -67,6 +81,11 @@ public class InteractUI : MonoBehaviour
         if (CanLockUI)
         {
             lockDialogue.OnFlipLockDialogue -= LockUI;
+        }
+
+        if (CanDepTransition)
+        {
+            DepTransition.OnDepEntry -= DisableUI;
         }
     }
    

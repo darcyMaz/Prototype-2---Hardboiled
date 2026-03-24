@@ -13,6 +13,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip EnemyHit;
     [SerializeField] private AudioClip EnemyHit2;
 
+    [SerializeField] private AudioClip DepEntryClip;
+    [SerializeField] private AudioClip DepExitClip;
+
     [SerializeField] private AudioSource BG;
     private bool HasBGMusic = false;
 
@@ -74,6 +77,9 @@ public class SoundManager : MonoBehaviour
                 ept.OnPlayerHit += PlayerHitSound;
             }
             if (CanHitPlayer) PlayerPunchTrigger.OnEnemyHit += EnemyHitSound;
+
+            DepTransition.OnDepEntry += DepEntrySound;
+            DepTransition.OnDepExit += DepExitSound;
         }
         
 
@@ -91,13 +97,15 @@ public class SoundManager : MonoBehaviour
                 ept.OnPlayerHit -= PlayerHitSound;
             }
             if (CanHitPlayer) PlayerPunchTrigger.OnEnemyHit -= EnemyHitSound;
+
+            DepTransition.OnDepEntry -= DepEntrySound;
+            DepTransition.OnDepExit -= DepExitSound;
         }
     }
 
     private void PlayerHitSound()
     {
-        SFX.clip = PlayerHit;
-        SFX.Play();
+        PlaySFX(PlayerHit);
     }
     private void EnemyHitSound()
     {
@@ -106,9 +114,24 @@ public class SoundManager : MonoBehaviour
         int random_num = rand.Next();
 
         // If it's even play the first one, if it's odd play the second one.
-        if (random_num % 2 == 0) SFX.clip = EnemyHit;
-        else SFX.clip = EnemyHit2;
+        if (random_num % 2 == 0) PlaySFX(EnemyHit);
+        else PlaySFX(EnemyHit2);
+    }
 
+    private void DepEntrySound()
+    {
+        PlaySFX(DepEntryClip);
+    }
+
+    private void DepExitSound()
+    {
+        PlaySFX(DepExitClip);
+    }
+
+
+    private void PlaySFX(AudioClip sfx)
+    {
+        SFX.clip = sfx;
         SFX.Play();
     }
 }

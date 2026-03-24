@@ -49,7 +49,7 @@ public class DepTransition : MonoBehaviour
     {
         if (DepTimerStarted && DepTimer <= 0)
         {
-            OnDepExit.Invoke();
+            OnDepExit?.Invoke();
         }
         DepTimer = (DepTimer < 0) ? 0 : DepTimer - Time.deltaTime;
     }
@@ -67,9 +67,7 @@ public class DepTransition : MonoBehaviour
     {
         if (IsPlayerOverlapping && !IsDoorLocked)
         {
-            // Send the scene string over to the scene manager.
-            // SceneManager.Instance.BufferSceneChange(NextScene);
-            OnDepEntry.Invoke();
+            OnDepEntry?.Invoke();
         }
     }
 
@@ -82,5 +80,6 @@ public class DepTransition : MonoBehaviour
     private void ExitDep()
     {
         IsDoorLocked = true;
+        DepTimerStarted = false;
     }
 }

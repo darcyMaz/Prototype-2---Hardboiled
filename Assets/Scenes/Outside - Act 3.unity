@@ -1373,6 +1373,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8530005613178968105, guid: 839e23495ac646541b84b9a28f1a2310, type: 3}
+      propertyPath: DepExitClip
+      value: 
+      objectReference: {fileID: 8300000, guid: fa1c01dbf60cd7542b798897ae07e570, type: 3}
+    - target: {fileID: 8530005613178968105, guid: 839e23495ac646541b84b9a28f1a2310, type: 3}
+      propertyPath: DepEntryClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c4e66ad022db020439b0b3a218505713, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
