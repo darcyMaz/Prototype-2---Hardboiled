@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
         // It would be cool if I could make it flip around like paper mario.
         // Rotate the sprite about the x axis but smoothdamp the rotation
 
-        if (IsSROn) sr.flipX = (direction == 0) ? sr.flipX : (direction == -1) ? true : false;
+        sr.flipX = (direction == 0) ? sr.flipX : (direction == -1) ? true : false;
     }
 
     private void EnableMove()

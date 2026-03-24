@@ -15,11 +15,11 @@ public class PlayerDeathListener : MonoBehaviour
     }
     private void OnEnable()
     {
-        start = inputActions.UI.Start;
+        start = inputActions.UI.Pause;
         start.Enable();
         start.performed += StartGame;
 
-        resume = inputActions.UI.Pause;
+        resume = inputActions.UI.Start;
         resume.Enable();
         resume.performed += ResetLevel;
 

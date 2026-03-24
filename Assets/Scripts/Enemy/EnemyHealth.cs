@@ -61,12 +61,14 @@ public class EnemyHealth : MonoBehaviour
             sr.color = hitColor1;
         }
 
+        // Debug.Log(enemyHealths.Count + );
+        enemyHealths.Remove(this);
+        
         Invoke("DestroyEnemy", 0.7f);
     }
     private void DestroyEnemy()
     {
         OnEnemyDeath?.Invoke();
-        enemyHealths.Remove(this);
         Destroy(gameObject);
     }
 
@@ -81,5 +83,12 @@ public class EnemyHealth : MonoBehaviour
     public void EnemyHitTriggered()
     {
         OnEnemyHit.Invoke();
+    }
+
+    // I don't really think the way I've set this up is good design.
+    // Lessons for the future.
+    public static void ClearEnemyHealths()
+    {
+        enemyHealths.Clear();
     }
 }

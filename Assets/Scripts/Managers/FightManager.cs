@@ -16,15 +16,18 @@ public class FightManager : MonoBehaviour
     
     private void Awake()
     {
+        Debug.Log("Fight manager awake");
         instance = this;
     }
     private void OnEnable()
     {
+        Debug.Log("Fight manager on enable");
         FightDiscussion.OnDialogueDone += StartFight;
 
         // Check this foreach loop
         foreach(EnemyHealth item in EnemyHealth.GetEnemyHealths())
         {
+            Debug.Log(item.name);
             item.OnEnemyDeath += EndFightCheck;
             EnemyCount++;
         }
@@ -38,12 +41,18 @@ public class FightManager : MonoBehaviour
 
     private void OnDisable()
     {
+        Debug.Log("FightManager OnDisable");
+
         FightDiscussion.OnDialogueDone -= StartFight;
 
         foreach (EnemyHealth item in EnemyHealth.GetEnemyHealths())
         {
             item.OnEnemyDeath -= EndFightCheck;
         }
+
+        EnemyCount = 0;
+        DeadEnemyCount = 0;
+        
         if (playerHealth != null)
         {
             playerHealth.OnPlayerDeath -= FightLost;
@@ -60,12 +69,14 @@ public class FightManager : MonoBehaviour
 
         if (DeadEnemyCount == EnemyCount)
         {
+            EnemyHealth.ClearEnemyHealths();
             OnFightCompleted?.Invoke();
         }
     }
 
     private void FightLost()
     {
+        EnemyHealth.ClearEnemyHealths();
         OnFightFailed?.Invoke();
         SceneManager.Instance.BufferSceneChange("Player Death");
     }

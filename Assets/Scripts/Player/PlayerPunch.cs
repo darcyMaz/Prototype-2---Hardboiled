@@ -72,6 +72,10 @@ public class PlayerPunch : MonoBehaviour
         cross.performed -= Cross;
         cross.canceled -= EndPunch;
 
+        hook.Disable();
+        hook.performed -= Hook;
+        hook.canceled -= EndPunch;
+
         FightManager.instance.OnFightStarted -= FightStarted;
         FightManager.instance.OnFightCompleted -= FightCompleted;
     }
@@ -119,7 +123,7 @@ public class PlayerPunch : MonoBehaviour
     {
         if (IsFightActive)
         {
-            OnPunch.Invoke(pt);
+            OnPunch?.Invoke(pt);
 
             // Disabling the fist is seperate from the sprite as the fist won't hurt just sitting there in the air.
             Invoke("DisableFists", PunchLandTime);
