@@ -1,0 +1,1 @@
+![Main character P. Black and white profile of tall white man in large overcoat.](https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png)
