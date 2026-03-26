@@ -9,3 +9,9 @@
     <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" style="max-width: 100%; height: auto;" alt="Alt text">
   </div>
 </div>
+
+<p float="left">
+  <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" width="33%" />
+  <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" width="33%" />
+  <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" width="33%" />
+</p>
