@@ -6,7 +6,7 @@ Gino (or Gigi as most people know him) has gone missing. He probably got caught 
 
 <div display="table">
   <div float="left" width="50%" padding="10px" height="200px">
-     <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" height="100px" />  
+     <img src="https://github.com/darcyMaz/Prototype-2---Hardboiled/blob/master/Assets/Sprites/player%20sprites/player%20sprites/player_outside.png" height="200px" />  
   </div>
   
   <div float="left" width="50%" padding="10px" height="200px">
